@@ -9,4 +9,5 @@ public interface BookManagerService {
     User register(RegisterRequest registerRequest);
     void login(LoginRequest loginRequest);
     void logout(LogoutRequest logoutRequest);
+    User findAccountBelongingTo(String username);
 }

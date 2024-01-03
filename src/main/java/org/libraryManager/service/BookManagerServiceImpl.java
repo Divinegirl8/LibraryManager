@@ -7,6 +7,7 @@ import org.libraryManager.dtos.request.LogoutRequest;
 import org.libraryManager.dtos.request.RegisterRequest;
 import org.libraryManager.exceptions.InvalidCredentialsException;
 import org.libraryManager.exceptions.UserExistException;
+import org.libraryManager.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import static org.libraryManager.utils.Mappers.*;
@@ -47,6 +48,15 @@ public class BookManagerServiceImpl implements BookManagerService{
 
         user.setLogin(false);
         userRepository.save(user);
+    }
+
+    @Override
+    public User findAccountBelongingTo(String username) {
+        User user = userRepository.findUserByUsername(username);
+
+        if (user == null) throw new UserNotFoundException(username + " not found");
+
+        return user;
     }
 
     private boolean userExist(String username){
