@@ -1,10 +1,11 @@
 package org.libraryManager.service;
 
+import org.libraryManager.data.models.Book;
 import org.libraryManager.data.models.User;
+import org.libraryManager.data.repositories.BookRepository;
+import org.libraryManager.data.repositories.TransactionRepository;
 import org.libraryManager.data.repositories.UserRepository;
-import org.libraryManager.dtos.request.LoginRequest;
-import org.libraryManager.dtos.request.LogoutRequest;
-import org.libraryManager.dtos.request.RegisterRequest;
+import org.libraryManager.dtos.request.*;
 import org.libraryManager.exceptions.InvalidCredentialsException;
 import org.libraryManager.exceptions.UserExistException;
 import org.libraryManager.exceptions.UserNotFoundException;
@@ -18,6 +19,10 @@ public class BookManagerServiceImpl implements BookManagerService{
     BookService bookService;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    BookRepository bookRepository;
+    @Autowired
+    TransactionRepository transactionRepository;
 
 
     @Override
@@ -57,6 +62,21 @@ public class BookManagerServiceImpl implements BookManagerService{
         if (user == null) throw new UserNotFoundException(username + " not found");
 
         return user;
+    }
+
+    @Override
+    public Book addBook(AddBookRequest addBookRequest) {
+        return bookService.addBook("BID" + (bookRepository.count()+1), addBookRequest.getTitle(), addBookRequest.getAuthor(), addBookRequest.getIsbn());
+    }
+
+    @Override
+    public Book findBook(FindBookRequest findBookRequest) {
+        return bookService.findBook(findBookRequest.getAuthor(),findBookRequest.getTitle());
+    }
+
+    @Override
+    public void removeBook(RemoveBookRequest removeBookRequest) {
+     bookService.removeBook(removeBookRequest.getAuthor(),removeBookRequest.getTitle());
     }
 
     private boolean userExist(String username){
