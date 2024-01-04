@@ -11,6 +11,9 @@ import org.libraryManager.exceptions.UserExistException;
 import org.libraryManager.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+
 import static org.libraryManager.utils.Mappers.*;
 
 @Service
@@ -77,6 +80,26 @@ public class BookManagerServiceImpl implements BookManagerService{
     @Override
     public void removeBook(RemoveBookRequest removeBookRequest) {
      bookService.removeBook(removeBookRequest.getAuthor(),removeBookRequest.getTitle());
+    }
+
+    @Override
+    public List<Book> listOfBooks() {
+        return bookService.listOfBooks();
+    }
+
+    @Override
+    public List<Book> findListOfBooksByAuthor(String author) {
+        return bookService.findListOfBooksByAuthor(author);
+    }
+
+    @Override
+    public void deleteAllBooks() {
+      bookService.deleteAllBooks();
+    }
+
+    @Override
+    public void deleteAllBooksByAuthor(String author) {
+     bookService.deleteAllBooksByAuthor(author);
     }
 
     private boolean userExist(String username){

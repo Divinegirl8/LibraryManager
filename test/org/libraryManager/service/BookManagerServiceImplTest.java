@@ -315,6 +315,164 @@ class BookManagerServiceImplTest {
         assertThrows(BookNotFoundException.class,()->bookManagerService.removeBook(removeBookRequest));
     }
 
+    @Test void register_User_Login_AddBook_FindAllBook_And_Logout(){
+        RegisterRequest registerRequest = new RegisterRequest();
+        registerRequest.setUsername("username");
+        registerRequest.setPassword("password");
+        bookManagerService.register(registerRequest);
+        assertFalse(bookManagerService.findAccountBelongingTo("username").isLogin());
+
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setUsername("username");
+        loginRequest.setPassword("password");
+        bookManagerService.login(loginRequest);
+        assertTrue(bookManagerService.findAccountBelongingTo("username").isLogin());
+
+        AddBookRequest addBookRequest = new AddBookRequest();
+        addBookRequest.setTitle("Title");
+        addBookRequest.setAuthor("Author");
+        addBookRequest.setIsbn("isbn");
+        bookManagerService.addBook(addBookRequest);
+        bookManagerService.addBook(addBookRequest);
+        bookManagerService.addBook(addBookRequest);
+
+        assertNotNull(bookManagerService.listOfBooks());
 
 
+        LogoutRequest logoutRequest = new LogoutRequest();
+        logoutRequest.setUsername("username");
+        logoutRequest.setPassword("password");
+        bookManagerService.logout(logoutRequest);
+        assertFalse(bookManagerService.findAccountBelongingTo("username").isLogin());
+
+    }
+    @Test void register_User_Login_AddBook_FindBookByAuthor_And_Logout(){
+        RegisterRequest registerRequest = new RegisterRequest();
+        registerRequest.setUsername("username");
+        registerRequest.setPassword("password");
+        bookManagerService.register(registerRequest);
+        assertFalse(bookManagerService.findAccountBelongingTo("username").isLogin());
+
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setUsername("username");
+        loginRequest.setPassword("password");
+        bookManagerService.login(loginRequest);
+        assertTrue(bookManagerService.findAccountBelongingTo("username").isLogin());
+
+        AddBookRequest addBookRequest = new AddBookRequest();
+        addBookRequest.setTitle("Title");
+        addBookRequest.setAuthor("Author");
+        addBookRequest.setIsbn("isbn");
+
+        AddBookRequest addBookRequest2 = new AddBookRequest();
+        addBookRequest2.setTitle("Title");
+        addBookRequest2.setAuthor("Author2");
+        addBookRequest2.setIsbn("isbn");
+        bookManagerService.addBook(addBookRequest);
+        bookManagerService.addBook(addBookRequest2);
+        bookManagerService.addBook(addBookRequest2);
+
+        assertNotNull(bookManagerService.findListOfBooksByAuthor("Author2"));
+
+
+        LogoutRequest logoutRequest = new LogoutRequest();
+        logoutRequest.setUsername("username");
+        logoutRequest.setPassword("password");
+        bookManagerService.logout(logoutRequest);
+        assertFalse(bookManagerService.findAccountBelongingTo("username").isLogin());
+
+    }
+    @Test void register_User_Login_AddBook_FindBookByAuthor_And_That_Does_Not_Exist(){
+        RegisterRequest registerRequest = new RegisterRequest();
+        registerRequest.setUsername("username");
+        registerRequest.setPassword("password");
+        bookManagerService.register(registerRequest);
+        assertFalse(bookManagerService.findAccountBelongingTo("username").isLogin());
+
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setUsername("username");
+        loginRequest.setPassword("password");
+        bookManagerService.login(loginRequest);
+        assertTrue(bookManagerService.findAccountBelongingTo("username").isLogin());
+
+        AddBookRequest addBookRequest = new AddBookRequest();
+        addBookRequest.setTitle("Title");
+        addBookRequest.setAuthor("Author");
+        addBookRequest.setIsbn("isbn");
+
+        AddBookRequest addBookRequest2 = new AddBookRequest();
+        addBookRequest2.setTitle("Title");
+        addBookRequest2.setAuthor("Author2");
+        addBookRequest2.setIsbn("isbn");
+        bookManagerService.addBook(addBookRequest);
+        bookManagerService.addBook(addBookRequest2);
+        bookManagerService.addBook(addBookRequest2);
+
+        assertThrows(BookNotFoundException.class,()->bookManagerService.findListOfBooksByAuthor("Auth"));
+    }
+
+    @Test void register_User_Login_AddBook_FindBookByAuthor_DeleteAllBooks_And_That_Does_Not_Exist(){
+        RegisterRequest registerRequest = new RegisterRequest();
+        registerRequest.setUsername("username");
+        registerRequest.setPassword("password");
+        bookManagerService.register(registerRequest);
+        assertFalse(bookManagerService.findAccountBelongingTo("username").isLogin());
+
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setUsername("username");
+        loginRequest.setPassword("password");
+        bookManagerService.login(loginRequest);
+        assertTrue(bookManagerService.findAccountBelongingTo("username").isLogin());
+
+        AddBookRequest addBookRequest = new AddBookRequest();
+        addBookRequest.setTitle("Title");
+        addBookRequest.setAuthor("Author");
+        addBookRequest.setIsbn("isbn");
+
+        AddBookRequest addBookRequest2 = new AddBookRequest();
+        addBookRequest2.setTitle("Title");
+        addBookRequest2.setAuthor("Author2");
+        addBookRequest2.setIsbn("isbn");
+        bookManagerService.addBook(addBookRequest);
+        bookManagerService.addBook(addBookRequest2);
+        bookManagerService.addBook(addBookRequest2);
+
+        bookManagerService.deleteAllBooks();
+
+        assertThrows(BookNotFoundException.class,()->bookManagerService.findListOfBooksByAuthor("Author2"));
+    }
+
+
+    @Test void register_User_Login_AddBook_FindBookByAuthor_DeleteAllBooks_By_Author() {
+        RegisterRequest registerRequest = new RegisterRequest();
+        registerRequest.setUsername("username");
+        registerRequest.setPassword("password");
+        bookManagerService.register(registerRequest);
+        assertFalse(bookManagerService.findAccountBelongingTo("username").isLogin());
+
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setUsername("username");
+        loginRequest.setPassword("password");
+        bookManagerService.login(loginRequest);
+        assertTrue(bookManagerService.findAccountBelongingTo("username").isLogin());
+
+        AddBookRequest addBookRequest = new AddBookRequest();
+        addBookRequest.setTitle("Title");
+        addBookRequest.setAuthor("Author");
+        addBookRequest.setIsbn("isbn");
+
+        AddBookRequest addBookRequest2 = new AddBookRequest();
+        addBookRequest2.setTitle("Title");
+        addBookRequest2.setAuthor("Author2");
+        addBookRequest2.setIsbn("isbn");
+        bookManagerService.addBook(addBookRequest);
+        bookManagerService.addBook(addBookRequest2);
+        bookManagerService.addBook(addBookRequest2);
+
+        bookManagerService.deleteAllBooksByAuthor("Author");
+
+        assertThrows(BookNotFoundException.class, () -> bookManagerService.findListOfBooksByAuthor("Author"));
+
+
+    }
 }

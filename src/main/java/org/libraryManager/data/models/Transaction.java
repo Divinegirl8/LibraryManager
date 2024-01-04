@@ -9,7 +9,8 @@ public class Transaction {
     @Id
     private String transId;
     private String userId;
-    private String bookId;
+    private String title;
+    private String author;
     private Date dueDate;
     private LocalDateTime dateIssued;
     private String amountCharge;
