@@ -1,6 +1,7 @@
 package org.libraryManager.service;
 
 import org.libraryManager.data.models.Book;
+import org.libraryManager.data.models.Transaction;
 import org.libraryManager.data.models.User;
 import org.libraryManager.data.repositories.BookRepository;
 import org.libraryManager.data.repositories.TransactionRepository;
@@ -100,6 +101,11 @@ public class BookManagerServiceImpl implements BookManagerService{
     @Override
     public void deleteAllBooksByAuthor(String author) {
      bookService.deleteAllBooksByAuthor(author);
+    }
+
+    @Override
+    public Transaction checkIn(CheckInRequest checkInRequest) {
+        return null;
     }
 
     private boolean userExist(String username){

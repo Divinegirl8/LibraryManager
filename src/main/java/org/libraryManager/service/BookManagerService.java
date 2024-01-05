@@ -1,6 +1,7 @@
 package org.libraryManager.service;
 
 import org.libraryManager.data.models.Book;
+import org.libraryManager.data.models.Transaction;
 import org.libraryManager.data.models.User;
 import org.libraryManager.dtos.request.*;
 
@@ -18,4 +19,5 @@ public interface BookManagerService {
     List<Book> findListOfBooksByAuthor(String author);
     void deleteAllBooks();
     void deleteAllBooksByAuthor(String author);
+    Transaction checkIn(CheckInRequest checkInRequest);
 }
