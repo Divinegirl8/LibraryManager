@@ -13,6 +13,7 @@ import org.libraryManager.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 @Service
 public class TransactionServiceImpl implements TransactionService{
@@ -24,8 +25,8 @@ public class TransactionServiceImpl implements TransactionService{
     BookRepository bookRepository;
 
     @Override
-    public Transaction checkIn(String transId, String userId, String title, String author, Date dueDate, LocalDateTime dateIssued, String amountCharge) {
-        User user = userRepository.findUserByUsername(userId);
+    public Transaction checkIn(String transId, String userId, String title, String author, Date dueDate, LocalDateTime dateIssued, BigDecimal amountCharge) {
+        User user = userRepository.findByUserId(userId);
         if (user == null)  throw new UserNotFoundException(userId + " not found");
 
         Book book = bookRepository.findBookByAuthorAndTitle(author,title);
@@ -45,7 +46,7 @@ public class TransactionServiceImpl implements TransactionService{
     }
 
     @Override
-    public Transaction checkOut(String transactionId, String title, String author, Date dueDate, LocalDateTime dateIssued) {
+    public Transaction checkOut(String transactionId, String title, String author) {
         Book book = bookRepository.findBookByAuthorAndTitle(author,title);
         if (book == null) throw new BookNotFoundException("Book not found");
 
@@ -56,9 +57,12 @@ public class TransactionServiceImpl implements TransactionService{
             throw new BookNotFoundException("Invalid details");
         }
 
-        transaction.setDateIssued(dateIssued);
-        transaction.setDueDate(dueDate);
+
+
+        transaction.setDueDate(transaction.getDueDate());
+        transaction.setReturned(true);
         transactionRepository.save(transaction);
+        bookRepository.save(book);
         return transaction;
 
     }

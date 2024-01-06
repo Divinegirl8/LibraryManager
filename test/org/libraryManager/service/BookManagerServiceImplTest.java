@@ -1,7 +1,9 @@
 package org.libraryManager.service;
 
+import lombok.Data;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import org.libraryManager.data.models.Date;
 import org.libraryManager.data.repositories.BookRepository;
 import org.libraryManager.data.repositories.TransactionRepository;
 import org.libraryManager.data.repositories.UserRepository;
@@ -11,6 +13,8 @@ import org.libraryManager.exceptions.InvalidCredentialsException;
 import org.libraryManager.exceptions.UserExistException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,6 +29,9 @@ class BookManagerServiceImplTest {
     TransactionRepository transactionRepository;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    TransactionService transactionService;
+
 
     @AfterEach
     void cleanUp(){
@@ -472,6 +479,106 @@ class BookManagerServiceImplTest {
         bookManagerService.deleteAllBooksByAuthor("Author");
 
         assertThrows(BookNotFoundException.class, () -> bookManagerService.findListOfBooksByAuthor("Author"));
+
+    }
+
+    @Test void register_User_Login_AddBook_CheckIn(){
+        RegisterRequest registerRequest = new RegisterRequest();
+        registerRequest.setUsername("username");
+        registerRequest.setPassword("password");
+        bookManagerService.register(registerRequest);
+        assertFalse(bookManagerService.findAccountBelongingTo("username").isLogin());
+
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setUsername("username");
+        loginRequest.setPassword("password");
+        bookManagerService.login(loginRequest);
+        assertTrue(bookManagerService.findAccountBelongingTo("username").isLogin());
+
+        AddBookRequest addBookRequest = new AddBookRequest();
+        addBookRequest.setTitle("Title");
+        addBookRequest.setAuthor("Author");
+        addBookRequest.setIsbn("isbn");
+
+        AddBookRequest addBookRequest2 = new AddBookRequest();
+        addBookRequest2.setTitle("Title");
+        addBookRequest2.setAuthor("Author2");
+        addBookRequest2.setIsbn("isbn");
+        bookManagerService.addBook(addBookRequest);
+        bookManagerService.addBook(addBookRequest2);
+        bookManagerService.addBook(addBookRequest2);
+
+       CheckInRequest checkInRequest = new CheckInRequest();
+       checkInRequest.setUserId("UID1");
+       checkInRequest.setAuthor("Author");
+       checkInRequest.setAmountCharge(BigDecimal.valueOf(1000));
+       checkInRequest.setTitle("Title");
+
+        Date date = new Date();
+        date.setDay("07");
+        date.setMonth("10");
+        date.setYear("1999");
+       checkInRequest.setDueDate(date);
+
+
+        bookManagerService.checkIn(checkInRequest);
+        assertEquals(1,transactionRepository.count());
+
+
+
+
+    }
+
+
+    @Test void register_User_Login_AddBook_CheckIn_And_CheckOut(){
+        RegisterRequest registerRequest = new RegisterRequest();
+        registerRequest.setUsername("username");
+        registerRequest.setPassword("password");
+        bookManagerService.register(registerRequest);
+        assertFalse(bookManagerService.findAccountBelongingTo("username").isLogin());
+
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setUsername("username");
+        loginRequest.setPassword("password");
+        bookManagerService.login(loginRequest);
+        assertTrue(bookManagerService.findAccountBelongingTo("username").isLogin());
+
+        AddBookRequest addBookRequest = new AddBookRequest();
+        addBookRequest.setTitle("Title");
+        addBookRequest.setAuthor("Author");
+        addBookRequest.setIsbn("isbn");
+
+        AddBookRequest addBookRequest2 = new AddBookRequest();
+        addBookRequest2.setTitle("Title");
+        addBookRequest2.setAuthor("Author2");
+        addBookRequest2.setIsbn("isbn");
+        bookManagerService.addBook(addBookRequest);
+        bookManagerService.addBook(addBookRequest2);
+        bookManagerService.addBook(addBookRequest2);
+
+        CheckInRequest checkInRequest = new CheckInRequest();
+        checkInRequest.setUserId("UID1");
+        checkInRequest.setAuthor("Author");
+        checkInRequest.setAmountCharge(BigDecimal.valueOf(1000));
+        checkInRequest.setTitle("Title");
+
+        Date date = new Date();
+        date.setDay("07");
+        date.setMonth("10");
+        date.setYear("1999");
+        checkInRequest.setDueDate(date);
+
+        System.out.println(bookManagerService.checkIn(checkInRequest));
+
+
+        CheckoutRequest checkoutRequest = new CheckoutRequest();
+        checkoutRequest.setAuthor("Author");
+        checkoutRequest.setTitle("Title");
+        checkoutRequest.setTransactionId("TID1");
+
+        System.out.println(bookManagerService.checkOut(checkoutRequest));
+
+
 
 
     }

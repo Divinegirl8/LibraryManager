@@ -3,6 +3,7 @@ package org.libraryManager.data.models;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 @Data
 public class Transaction {
@@ -13,5 +14,6 @@ public class Transaction {
     private String author;
     private Date dueDate;
     private LocalDateTime dateIssued;
-    private String amountCharge;
+    private BigDecimal amountCharge;
+    private boolean isReturned;
 }

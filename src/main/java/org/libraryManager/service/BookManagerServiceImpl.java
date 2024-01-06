@@ -13,6 +13,7 @@ import org.libraryManager.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.libraryManager.utils.Mappers.*;
@@ -107,12 +108,12 @@ public class BookManagerServiceImpl implements BookManagerService{
 
     @Override
     public Transaction checkIn(CheckInRequest checkInRequest) {
-        return transactionService.checkIn("TID" + (transactionRepository.count()), checkInRequest.getUserId(), checkInRequest.getTitle(), checkInRequest.getAuthor(), checkInRequest.getDueDate(),checkInRequest.getDateIssued(), checkInRequest.getAmountCharge());
+        return transactionService.checkIn("TID" + (transactionRepository.count()+1), checkInRequest.getUserId(), checkInRequest.getTitle(), checkInRequest.getAuthor(), checkInRequest.getDueDate(), LocalDateTime.now(), checkInRequest.getAmountCharge());
     }
 
     @Override
     public Transaction checkOut(CheckoutRequest checkoutRequest) {
-        return null;
+        return transactionService.checkOut(checkoutRequest.getTransactionId(), checkoutRequest.getTitle(), checkoutRequest.getAuthor());
     }
 
     private boolean userExist(String username){

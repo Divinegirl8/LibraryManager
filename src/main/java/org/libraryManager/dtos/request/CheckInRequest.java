@@ -3,6 +3,7 @@ package org.libraryManager.dtos.request;
 import lombok.Data;
 import org.libraryManager.data.models.Date;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 @Data
 public class CheckInRequest {
@@ -11,6 +12,6 @@ public class CheckInRequest {
     private String author;
     private Date dueDate;
     private LocalDateTime dateIssued;
-    private String amountCharge;
+    private BigDecimal amountCharge;
 
 }
