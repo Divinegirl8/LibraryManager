@@ -20,4 +20,5 @@ public interface BookManagerService {
     void deleteAllBooks();
     void deleteAllBooksByAuthor(String author);
     Transaction checkIn(CheckInRequest checkInRequest);
+    Transaction checkOut(CheckoutRequest checkoutRequest);
 }

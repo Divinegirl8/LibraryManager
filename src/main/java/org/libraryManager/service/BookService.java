@@ -13,4 +13,5 @@ public interface BookService {
     List<Book> findListOfBooksByAuthor(String author);
     void deleteAllBooks();
     void deleteAllBooksByAuthor(String author);
+
 }

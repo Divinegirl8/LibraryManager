@@ -8,4 +8,5 @@ import java.util.List;
 public interface BookRepository extends MongoRepository<Book,String> {
     Book findBookByAuthorAndTitle(String author,String title);
     List<Book> findBookByAuthor(String author);
+
 }

@@ -8,6 +8,7 @@ import org.libraryManager.data.repositories.BookRepository;
 import org.libraryManager.data.repositories.TransactionRepository;
 import org.libraryManager.data.repositories.UserRepository;
 import org.libraryManager.exceptions.BookNotFoundException;
+import org.libraryManager.exceptions.TransactionNotFoundException;
 import org.libraryManager.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ public class TransactionServiceImpl implements TransactionService{
     TransactionRepository transactionRepository;
     @Autowired
     BookRepository bookRepository;
+
     @Override
     public Transaction checkIn(String transId, String userId, String title, String author, Date dueDate, LocalDateTime dateIssued, String amountCharge) {
         User user = userRepository.findUserByUsername(userId);
@@ -37,7 +39,28 @@ public class TransactionServiceImpl implements TransactionService{
         transaction.setDueDate(dueDate);
         transaction.setDateIssued(dateIssued);
         transaction.setAmountCharge(amountCharge);
+        transactionRepository.save(transaction);
         return transaction;
+
+    }
+
+    @Override
+    public Transaction checkOut(String transactionId, String title, String author, Date dueDate, LocalDateTime dateIssued) {
+        Book book = bookRepository.findBookByAuthorAndTitle(author,title);
+        if (book == null) throw new BookNotFoundException("Book not found");
+
+        Transaction transaction = transactionRepository.findByTransId(transactionId);
+        if (transaction == null) throw new TransactionNotFoundException(transactionId + " not found");
+
+        if (!transaction.getAuthor().equals(book.getAuthor()) && transaction.getTitle().equals(book.getTitle())){
+            throw new BookNotFoundException("Invalid details");
+        }
+
+        transaction.setDateIssued(dateIssued);
+        transaction.setDueDate(dueDate);
+        transactionRepository.save(transaction);
+        return transaction;
+
     }
 }
 

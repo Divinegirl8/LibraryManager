@@ -27,6 +27,8 @@ public class BookManagerServiceImpl implements BookManagerService{
     BookRepository bookRepository;
     @Autowired
     TransactionRepository transactionRepository;
+    @Autowired
+    TransactionService transactionService;
 
 
     @Override
@@ -105,6 +107,11 @@ public class BookManagerServiceImpl implements BookManagerService{
 
     @Override
     public Transaction checkIn(CheckInRequest checkInRequest) {
+        return transactionService.checkIn("TID" + (transactionRepository.count()), checkInRequest.getUserId(), checkInRequest.getTitle(), checkInRequest.getAuthor(), checkInRequest.getDueDate(),checkInRequest.getDateIssued(), checkInRequest.getAmountCharge());
+    }
+
+    @Override
+    public Transaction checkOut(CheckoutRequest checkoutRequest) {
         return null;
     }
 
