@@ -565,18 +565,19 @@ class BookManagerServiceImplTest {
         Date date = new Date();
         date.setDay("07");
         date.setMonth("10");
-        date.setYear("1999");
+        date.setYear("2000");
         checkInRequest.setDueDate(date);
 
-        System.out.println(bookManagerService.checkIn(checkInRequest));
+        assertNotNull(bookManagerService.checkIn(checkInRequest));
 
 
         CheckoutRequest checkoutRequest = new CheckoutRequest();
         checkoutRequest.setAuthor("Author");
         checkoutRequest.setTitle("Title");
         checkoutRequest.setTransactionId("TID1");
+        checkoutRequest.setDateReturned(date);
 
-        System.out.println(bookManagerService.checkOut(checkoutRequest));
+        assertNotNull(bookManagerService.checkOut(checkoutRequest));
 
 
 

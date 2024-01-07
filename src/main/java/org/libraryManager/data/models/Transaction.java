@@ -16,4 +16,5 @@ public class Transaction {
     private LocalDateTime dateIssued;
     private BigDecimal amountCharge;
     private boolean isReturned;
+    private Date dateReturned;
 }

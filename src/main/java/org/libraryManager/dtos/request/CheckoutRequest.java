@@ -11,4 +11,5 @@ public class CheckoutRequest {
     private String title;
     private String author;
     private Date dueDate;
+    private Date dateReturned;
 }

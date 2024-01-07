@@ -46,7 +46,7 @@ public class TransactionServiceImpl implements TransactionService{
     }
 
     @Override
-    public Transaction checkOut(String transactionId, String title, String author) {
+    public Transaction checkOut(String transactionId, String title, String author,Date dateReturned) {
         Book book = bookRepository.findBookByAuthorAndTitle(author,title);
         if (book == null) throw new BookNotFoundException("Book not found");
 
@@ -61,6 +61,7 @@ public class TransactionServiceImpl implements TransactionService{
 
         transaction.setDueDate(transaction.getDueDate());
         transaction.setReturned(true);
+        transaction.setDateReturned(dateReturned);
         transactionRepository.save(transaction);
         bookRepository.save(book);
         return transaction;

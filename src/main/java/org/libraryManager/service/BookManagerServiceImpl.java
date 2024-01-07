@@ -113,7 +113,7 @@ public class BookManagerServiceImpl implements BookManagerService{
 
     @Override
     public Transaction checkOut(CheckoutRequest checkoutRequest) {
-        return transactionService.checkOut(checkoutRequest.getTransactionId(), checkoutRequest.getTitle(), checkoutRequest.getAuthor());
+        return transactionService.checkOut(checkoutRequest.getTransactionId(), checkoutRequest.getTitle(), checkoutRequest.getAuthor(),checkoutRequest.getDateReturned());
     }
 
     private boolean userExist(String username){
