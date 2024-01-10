@@ -22,7 +22,7 @@ public class LibrarianController {
         RegisterResponse registerResponse = new RegisterResponse();
         try {
             User user = bookManagerService.register(registerRequest);
-            registerResponse.setMessage("Your Id is " + user);
+            registerResponse.setMessage("Your Id is " + user.getUserId());
             return new ResponseEntity<>(new ApiResponse(true, registerResponse), HttpStatus.CREATED);
         } catch (Exception exception) {
             registerResponse.setMessage(exception.getMessage());
